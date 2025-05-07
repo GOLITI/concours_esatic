@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Accueil - ESATIC Concours{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hero-bg-image {
+        background-image: url('{% static "images/hero-bg.jpg" %}');
+        height: 400px;
+        background-size: cover;
+        background-position: center;
+        border-radius: 0.3rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero-section mb-5">
+    <div class="p-5 text-center bg-image rounded-3 hero-bg-image">
+        <div class="mask" style="background-color: rgba(0, 0, 0, 0.6); height: 100%;">
+            <div class="d-flex justify-content-center align-items-center h-100">
+                <div class="text-white">
+                    <h1 class="mb-3">Inscription aux Concours de l'ESATIC</h1>
+                    <h4 class="mb-3">Rejoignez l'excellence en technologies de l'information</h4>
+                    <a class="btn btn-primary btn-lg" href="{% url 'inscription' %}" role="button">S'inscrire maintenant</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-5">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="bi bi-file-earmark-text fs-1 text-primary mb-3"></i>
+                <h3 class="card-title">Inscription en ligne</h3>
+                <p class="card-text">Remplissez le formulaire d'inscription en ligne et soumettez vos documents numérisés.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="bi bi-check-circle fs-1 text-primary mb-3"></i>
+                <h3 class="card-title">Validation</h3>
+                <p class="card-text">Recevez une confirmation immédiate de votre inscription avec un numéro unique.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="bi bi-printer fs-1 text-primary mb-3"></i>
+                <h3 class="card-title">Téléchargement</h3>
+                <p class="card-text">Téléchargez et imprimez votre récépissé d'inscription pour validation.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2 class="text-center mb-4">Concours disponibles</h2>
+<div class="row">
+    {% for concour in concours %}
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">{{ concour.nom }}</h3>
+            </div>
+            <div class="card-body">
+                <p>{{ concour.description }}</p>
+                <ul class="list-group list-group-flush mb-3">
+                    <li class="list-group-item"><strong>Date limite:</strong> {{ concour.date_limite|date:"d/m/Y" }}</li>
+                    <li class="list-group-item"><strong>Frais d'inscription:</strong> {{ concour.frais_inscription }} FCFA</li>
+                </ul>
+                <a href="{% url 'inscription' %}?concours={{ concour.id }}" class="btn btn-primary">S'inscrire</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

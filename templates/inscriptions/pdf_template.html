@@ -1,0 +1,386 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmation d'Inscription - ESATIC</title>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 2cm 1.5cm;
+            padding: 0;
+            @top-center {
+                content: "";
+                height: 5mm;
+                background-color: #037f8c;
+            }
+            @bottom-center {
+                content: "Page " counter(page) " sur " counter(pages);
+                font-size: 9pt;
+                color: #666;
+                padding-top: 3mm;
+                border-top: 0.5pt solid #ddd;
+            }
+        }
+        
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('{% static "fonts/Montserrat-Regular.ttf" %}') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('{% static "fonts/Montserrat-Bold.ttf" %}') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }
+        
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('{% static "fonts/Montserrat-Light.ttf" %}') format('truetype');
+            font-weight: 300;
+            font-style: normal;
+        }
+        
+        body {
+            font-family: 'Montserrat', 'DejaVu Sans', sans-serif;
+            font-size: 10pt;
+            line-height: 1.5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* En-tête du document */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1cm;
+            border-bottom: 1px solid #eaeaea;
+            margin-bottom: 1cm;
+        }
+        
+        .header-left {
+            width: 30%;
+        }
+        
+        .header-right {
+            width: 70%;
+            text-align: right;
+        }
+        
+        .logo {
+            width: 120px;
+            height: auto;
+        }
+        
+        .institution {
+            font-size: 18pt;
+            font-weight: bold;
+            color: #037f8c;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            font-size: 12pt;
+            color: #666;
+            font-weight: 300;
+        }
+        
+        /* Titre principal */
+        .document-title {
+            text-align: center;
+            margin-bottom: 1cm;
+        }
+        
+        .document-title h1 {
+            font-size: 22pt;
+            color: #037f8c;
+            margin: 0;
+            padding: 0;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        
+        .document-title .barcode-placeholder {
+            margin-top: 5mm;
+            text-align: center;
+        }
+        
+        .document-title .success {
+            font-size: 14pt;
+            color: #28a745;
+            margin-top: 3mm;
+        }
+        
+        .document-title .numero {
+            display: inline-block;
+            background-color: #037f8c;
+            color: white;
+            padding: 2mm 5mm;
+            border-radius: 3mm;
+            font-weight: bold;
+            font-size: 12pt;
+            margin-top: 5mm;
+        }
+        
+        /* Bloc d'informations */
+        .info-section {
+            margin-bottom: 1cm;
+        }
+        
+        .info-section h2 {
+            font-size: 14pt;
+            color: #037f8c;
+            margin-bottom: 5mm;
+            padding-bottom: 2mm;
+            border-bottom: 2px solid #037f8c;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5mm;
+        }
+        
+        .info-item {
+            margin-bottom: 3mm;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .info-value {
+            color: #333;
+        }
+        
+        /* Instructions et notes importantes */
+        .instructions {
+            background-color: #f5f9fa;
+            border-left: 4px solid #037f8c;
+            padding: 5mm;
+            margin: 1cm 0;
+        }
+        
+        .instructions h3 {
+            color: #037f8c;
+            font-size: 12pt;
+            margin-top: 0;
+            margin-bottom: 3mm;
+        }
+        
+        .instructions ul {
+            margin: 0;
+            padding-left: 5mm;
+        }
+        
+        .instructions li {
+            margin-bottom: 2mm;
+        }
+        
+        /* Pied de page et signature */
+        .signature-section {
+            margin-top: 1.5cm;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .signature-box {
+            border-top: 1px solid #ddd;
+            width: 45%;
+            padding-top: 3mm;
+            text-align: center;
+        }
+        
+        .signature-title {
+            font-weight: bold;
+            font-size: 9pt;
+            margin-bottom: 15mm;
+        }
+        
+        .footer {
+            margin-top: 2cm;
+            text-align: center;
+            font-size: 8pt;
+            color: #666;
+            border-top: 1px solid #eaeaea;
+            padding-top: 5mm;
+        }
+        
+        .footer p {
+            margin: 1mm 0;
+        }
+        
+        /* Filigrane */
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 35%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            opacity: 0.04;
+            font-size: 150pt;
+            color: #000;
+            z-index: -1;
+            font-weight: bold;
+        }
+        
+        /* Classes utilitaires */
+        .text-center {
+            text-align: center;
+        }
+        
+        .text-right {
+            text-align: right;
+        }
+        
+        .text-primary {
+            color: #037f8c;
+        }
+        
+        .text-success {
+            color: #28a745;
+        }
+        
+        .mb-1 {
+            margin-bottom: 0.25cm;
+        }
+        
+        .qr-code {
+            width: 100px;
+            height: 100px;
+            background-color: #f1f1f1;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .qr-code::before {
+            content: "QR";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <!-- Filigrane -->
+    <div class="watermark">ESATIC</div>
+    
+    <!-- En-tête -->
+    <div class="header">
+        <div class="header-left">
+            <!-- Remplacer par le vrai logo de l'ESATIC -->
+            <img class="logo" src="{% static 'images/logo_esatic.png' %}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'60\'><rect width=\'120\' height=\'60\' fill=\'%23037f8c\'/><text x=\'50%\' y=\'50%\' font-family=\'sans-serif\' font-size=\'18\' text-anchor=\'middle\' fill=\'white\' dy=\'.3em\'>ESATIC</text></svg>'" alt="Logo ESATIC">
+        </div>
+        <div class="header-right">
+            <div class="institution">ESATIC</div>
+            <div class="subtitle">École Supérieure Africaine des Technologies<br>de l'Information et de la Communication</div>
+            <div style="font-size: 9pt; margin-top: 5px;">RÉPUBLIQUE DE CÔTE D'IVOIRE</div>
+        </div>
+    </div>
+    
+    <!-- Titre du document -->
+    <div class="document-title">
+        <h1>CONFIRMATION D'INSCRIPTION</h1>
+        <p class="subtitle" style="font-size: 14pt;">Concours d'entrée {{ candidat.concours.nom }} - Session {% now "Y" %}</p>
+        <div class="barcode-placeholder">
+            <div class="qr-code"></div>
+        </div>
+        <p class="success">✓ INSCRIPTION VALIDÉE</p>
+        <p class="numero">N° {{ candidat.numero_inscription }}</p>
+    </div>
+    
+    <!-- Informations personnelles -->
+    <div class="info-section">
+        <h2>INFORMATIONS PERSONNELLES</h2>
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label">Nom complet:</span>
+                <span class="info-value">{{ candidat.nom }} {{ candidat.prenom }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Date de naissance:</span>
+                <span class="info-value">{{ candidat.date_naissance|date:"d/m/Y" }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Lieu de naissance:</span>
+                <span class="info-value">{{ candidat.lieu_naissance }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Nationalité:</span>
+                <span class="info-value">{{ candidat.nationalite }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Téléphone:</span>
+                <span class="info-value">{{ candidat.telephone }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Email:</span>
+                <span class="info-value">{{ candidat.email }}</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Informations académiques -->
+    <div class="info-section">
+        <h2>INFORMATIONS ACADÉMIQUES</h2>
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label">Niveau d'étude:</span>
+                <span class="info-value">{{ candidat.get_niveau_etude_display }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Établissement d'origine:</span>
+                <span class="info-value">{{ candidat.etablissement_origine }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Concours:</span>
+                <span class="info-value">{{ candidat.concours.nom }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Date d'inscription:</span>
+                <span class="info-value">{{ candidat.date_inscription|date:"d/m/Y H:i" }}</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Instructions -->
+    <div class="instructions">
+        <h3>INSTRUCTIONS IMPORTANTES</h3>
+        <ul>
+            <li>Conservez précieusement ce document et votre numéro d'inscription.</li>
+            <li>Présentez ce document lors des épreuves avec une pièce d'identité valide (CNI, passeport ou attestation).</li>
+            <li>Vous recevrez un email avec les détails des épreuves (date, lieu, horaire) à l'adresse indiquée.</li>
+            <li>Soyez présent(e) au centre d'examen au moins 30 minutes avant le début des épreuves.</li>
+            <li>Pour toute information complémentaire, contactez le service des concours de l'ESATIC.</li>
+        </ul>
+    </div>
+    
+    <!-- Signature -->
+    <div class="signature-section">
+        <div class="signature-box">
+            <div class="signature-title">Le Candidat</div>
+            <div>(Signature)</div>
+        </div>
+        <div class="signature-box">
+            <div class="signature-title">Pour l'ESATIC</div>
+            <div>Service des Concours</div>
+        </div>
+    </div>
+    
+    <!-- Pied de page -->
+    <div class="footer">
+        <p><strong>École Supérieure Africaine des Technologies de l'Information et de la Communication (ESATIC)</strong></p>
+        <p>Abidjan, Côte d'Ivoire | Tél: (+225) +225 07 77 25 13 44 | Email: concours@esatic.edu.ci</p>
+        <p>www.esatic.edu.ci | © {% now "Y" %} ESATIC - Tous droits réservés</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Confirmation d'Inscription - ESATIC Concours{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-success text-white">
+        <h2 class="mb-0">Confirmation d'Inscription</h2>
+    </div>
+    <div class="card-body">
+        <div class="text-center mb-4">
+            <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+            <h3 class="mt-3">Félicitations!</h3>
+            <p class="lead">Votre inscription au concours a été enregistrée avec succès.</p>
+        </div>
+        
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card mb-3">
+                    <div class="card-header bg-light">
+                        <h4 class="mb-0">Vos informations</h4>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Nom complet:</strong> {{ candidat.nom }} {{ candidat.prenom }}</p>
+                        <p><strong>Date de naissance:</strong> {{ candidat.date_naissance|date:"d/m/Y" }}</p>
+                        <p><strong>Lieu de naissance:</strong> {{ candidat.lieu_naissance }}</p>
+                        <p><strong>Nationalité:</strong> {{ candidat.nationalite }}</p>
+                        <p><strong>Téléphone:</strong> {{ candidat.telephone }}</p>
+                        <p><strong>Email:</strong> {{ candidat.email }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-3">
+                    <div class="card-header bg-light">
+                        <h4 class="mb-0">Informations académiques</h4>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Niveau d'étude:</strong> {{ candidat.get_niveau_etude_display }}</p>
+                        <p><strong>Établissement d'origine:</strong> {{ candidat.etablissement_origine }}</p>
+                        <p><strong>Concours:</strong> {{ candidat.concours.nom }}</p>
+                        <p><strong>Date d'inscription:</strong> {{ candidat.date_inscription|date:"d/m/Y H:i" }}</p>
+                        <p><strong>Numéro d'inscription:</strong> <span class="badge bg-primary">{{ candidat.numero_inscription }}</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="alert alert-info">
+            <h4><i class="bi bi-info-circle"></i> Instructions importantes</h4>
+            <ul>
+                <li>Conservez précieusement votre numéro d'inscription</li>
+                <li>Imprimez cette page ou téléchargez le PDF comme preuve d'inscription</li>
+                <li>Vous recevrez un email de confirmation avec les détails des épreuves</li>
+                <li>Pour toute question, contactez-nous à concours@esatic.edu.ci</li>
+            </ul>
+        </div>
+        
+        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+            <a href="{% url 'generate_pdf' candidat.id %}" class="btn btn-primary btn-lg me-md-2" id="generate-pdf">
+                <i class="bi bi-download"></i> Télécharger le PDF
+            </a>
+            <a href="{% url 'accueil' %}" class="btn btn-outline-secondary btn-lg">
+                <i class="bi bi-house"></i> Retour à l'accueil
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Template séparé optimisé pour PDF avec WeasyPrint -->
+<div id="pdf-template" style="display: none;">
+{% include "inscriptions/pdf_template.html" %}
+</div>
+
+<script>
+document.getElementById('generate-pdf').addEventListener('click', function() {
+    this.innerHTML = '<i class="bi bi-hourglass"></i> Génération en cours...';
+    this.classList.add('disabled');
+});
+</script>
+{% endblock %}
